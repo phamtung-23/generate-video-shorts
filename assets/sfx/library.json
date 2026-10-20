@@ -1,0 +1,41 @@
+{
+  "whoosh": {
+    "file": "whoosh-short.mp3",
+    "hit": 0.05,
+    "license": "Pixabay Content License",
+    "source": "HyperFrames media-use bundled library (Pixabay)",
+    "use": "title pop-in at the start"
+  },
+  "swell": {
+    "file": "whoosh-cinematic.mp3",
+    "hit": 2.5,
+    "license": "Pixabay Content License",
+    "source": "HyperFrames media-use bundled library (Pixabay)",
+    "use": "builds into the goal; its peak lands on the impact"
+  },
+  "impact": {
+    "file": "impact-bass-1.mp3",
+    "hit": 0.05,
+    "license": "Pixabay Content License",
+    "source": "HyperFrames media-use bundled library (Pixabay)",
+    "use": "bass hit on the impact, with the punch-in and flash"
+  },
+  "crowd": {
+    "file": "crowd-goal-reaction.mp3",
+    "hit": 4.0,
+    "title": "19 Football Crowd - Reaction To Goal",
+    "creator": "D.jones",
+    "license": "CC0 1.0",
+    "source": "https://freesound.org/people/D.jones/sounds/528799/",
+    "use": "crowd builds through the shot, roars just after the impact"
+  },
+  "ambience": {
+    "file": "stadium-ambience.mp3",
+    "hit": 0,
+    "title": "Soccer Stadium 02",
+    "creator": "Sandermotions",
+    "license": "CC0 1.0",
+    "source": "https://freesound.org/people/Sandermotions/sounds/494350/",
+    "use": "stadium bed under the whole short when the source audio is replaced"
+  }
+}

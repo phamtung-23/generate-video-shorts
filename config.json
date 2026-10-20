@@ -1,0 +1,141 @@
+{
+  "download": {
+    "max_height": 1080
+  },
+  "transcribe": {
+    "enabled": true,
+    "model": "~/.cache/whisper-cpp/ggml-large-v3-turbo-q5_0.bin",
+    "language": "auto",
+    "threads": 8,
+    "min_sentence_prob": 0.45
+  },
+  "highlights": {
+    "count": 5,
+    "target_seconds": 30,
+    "min_seconds": 15,
+    "max_seconds": 58,
+    "pre_roll_ratio": 0.55,
+    "min_gap_seconds": 20,
+    "skip_start_seconds": 0,
+    "skip_end_seconds": 0,
+    "min_score": 0.8,
+    "weights": {
+      "audio": 1.0,
+      "keywords": 1.5,
+      "scene": 0.3
+    },
+    "keywords": [
+      "goal",
+      "goals",
+      "golazo",
+      "gol",
+      "scores",
+      "scored",
+      "what a",
+      "oh my",
+      "wow",
+      "incredible",
+      "unbelievable",
+      "amazing",
+      "stunning",
+      "brilliant",
+      "sensational",
+      "spectacular",
+      "penalty",
+      "save",
+      "saved",
+      "red card",
+      "offside",
+      "header",
+      "volley",
+      "top corner",
+      "dunk",
+      "slam",
+      "three pointer",
+      "buzzer",
+      "and one",
+      "block",
+      "ace",
+      "match point",
+      "knockout",
+      "ko",
+      "touchdown",
+      "home run",
+      "wicket",
+      "six",
+      "vào",
+      "bàn thắng",
+      "ghi bàn",
+      "tuyệt vời",
+      "không thể tin",
+      "quá đẹp",
+      "siêu phẩm",
+      "phạt đền",
+      "cứu thua",
+      "thẻ đỏ",
+      "việt vị",
+      "đánh đầu",
+      "sút",
+      "úp rổ",
+      "ăn ba"
+    ],
+    "impact_keywords": [
+      "goal",
+      "golazo",
+      "gol",
+      "scores",
+      "scored",
+      "what a save",
+      "saved",
+      "vào",
+      "bàn thắng"
+    ]
+  },
+  "reframe": {
+    "mode": "blur",
+    "zoom": 1.0,
+    "crop_x": 0.5,
+    "offset_y": 0
+  },
+  "style": {
+    "accent": "#FFE600",
+    "title_bg": "#FFE600",
+    "title_color": "#0A0A0A",
+    "caption_color": "#FFFFFF",
+    "caption_uppercase": true,
+    "caption_max_words": 3,
+    "captions": false,
+    "channel_handle": ""
+  },
+  "render": {
+    "hyperframes_version": "0.8.181",
+    "fps": 30,
+    "quality": "delivery"
+  },
+  "audio": {
+    "original": "none",
+    "music": false,
+    "music_volume": 0.6,
+    "music_duck_volume": 0.2,
+    "music_drop_at_impact": true,
+    "ambience": false,
+    "ambience_volume": 0.35,
+    "sfx": true,
+    "sfx_volume": 0.8
+  },
+  "effects": {
+    "impact_punch": true,
+    "impact_flash": true
+  },
+  "upload": {
+    "hashtags": "#shorts #football #soccer #highlights",
+    "sound_suggestions": [
+      "\"Champions (WC 26)\" — IShowSpeed (gắn với World Cup 2026)",
+      "\"Dai Dai\" — Shakira & Burna Boy (anthem bóng đá hè 2026)",
+      "\"Montagem Uranium\" — ZAYLO (funk/phonk, hợp pha bứt tốc, ghi bàn)",
+      "\"PASSO BEM SOLTO\" — ATLXS (phonk Brazil)",
+      "\"Verão Flow\" — dnvn, SYNPIX, Phonk King (phonk)",
+      "\"The Nights\" — Avicii (edit cảm xúc, tri ân)"
+    ]
+  }
+}

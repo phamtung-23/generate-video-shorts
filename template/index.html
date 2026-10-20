@@ -1,0 +1,236 @@
+<!doctype html>
+<!--
+  Sports Shorts overlay — 1080x1920.
+  render.py fills __DURATION__, __VIDEO_AUDIO__ and the DATA object for each clip;
+  the vertical clip itself is already reframed by ffmpeg (assets/clip.mp4).
+-->
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: "Montserrat", sans-serif;
+      }
+      #cam {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      #clip {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      #flash {
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        opacity: 0;
+        z-index: 4;
+        pointer-events: none;
+      }
+      #hook-row {
+        position: absolute;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        padding: 0 90px;
+        z-index: 5;
+      }
+      .hook-tilt {
+        display: block;
+        transform: rotate(-2deg);
+      }
+      #hook {
+        display: block;
+        max-width: 900px;
+        padding: 14px 30px 18px;
+        border-radius: 10px;
+        font-weight: 900;
+        line-height: 1.08;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+      }
+      #handle {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 150px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 34px;
+        color: #fff;
+        opacity: 0.8;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        z-index: 5;
+      }
+      .cap-group {
+        position: absolute;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 4px 30px;
+        padding: 0 110px;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 6;
+      }
+      .cap-word {
+        display: inline-block;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: 0.01em;
+        -webkit-text-stroke: 14px #000;
+        paint-order: stroke fill;
+        text-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+        transform-origin: 50% 60%;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="__DURATION__"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="cam">
+        <video
+          id="clip"
+          class="clip"
+          src="assets/clip.mp4"
+          playsinline
+          __VIDEO_AUDIO__
+          data-start="0"
+          data-duration="__DURATION__"
+          data-track-index="0"
+        ></video>
+      </div>
+      <!--__AUDIO__-->
+      <div id="flash"></div>
+      <div id="hook-row"><span class="hook-tilt"><span id="hook"></span></span></div>
+      <div id="handle"></div>
+      <div id="captions"></div>
+    </div>
+    <script>
+      const DATA = /*__DATA__*/ {
+        duration: 8,
+        title: "Siêu phẩm phút 89!",
+        titleSize: 84,
+        handle: "@kenhthethao",
+        layout: { titleTop: null, titleBottom: 620, captionTop: 1308, focusY: 960 },
+        impacts: [4],
+        effects: { punch: true, flash: true },
+        style: { accent: "#FFE600", titleBg: "#FFE600", titleColor: "#0A0A0A", captionColor: "#FFFFFF", uppercase: true },
+        lines: [
+          { start: 0.3, end: 1.4, size: 88, words: [{ text: "Không", start: 0.3, end: 0.6 }, { text: "thể", start: 0.6, end: 0.9 }, { text: "tin", start: 0.9, end: 1.4 }] },
+          { start: 1.6, end: 2.8, size: 88, words: [{ text: "Vàooo!", start: 1.6, end: 2.8 }] },
+        ],
+      };
+
+      const tl = gsap.timeline({ paused: true });
+      const S = DATA.style;
+
+      // Title hook
+      const hookRow = document.getElementById("hook-row");
+      const hook = document.getElementById("hook");
+      if (DATA.title) {
+        hook.textContent = DATA.title;
+        hook.style.fontSize = DATA.titleSize + "px";
+        hook.style.background = S.titleBg;
+        hook.style.color = S.titleColor;
+        if (DATA.layout.titleTop !== null) hookRow.style.top = DATA.layout.titleTop + "px";
+        else hookRow.style.bottom = 1920 - DATA.layout.titleBottom + "px";
+        tl.fromTo(hook, { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.4)" }, 0.1);
+      } else {
+        hookRow.style.display = "none";
+      }
+
+      const handle = document.getElementById("handle");
+      if (DATA.handle) handle.textContent = DATA.handle;
+      else handle.style.display = "none";
+
+      // Captions: one group on screen at a time, current word in the accent colour.
+      const captions = document.getElementById("captions");
+      DATA.lines.forEach(function (line, gi) {
+        const next = DATA.lines[gi + 1];
+        const gEnd = Math.max(line.start + 0.15, Math.min(line.end + 0.35, next ? next.start - 0.03 : DATA.duration));
+        const grp = document.createElement("div");
+        grp.className = "cap-group";
+        grp.id = "cg-" + gi;
+        grp.style.top = DATA.layout.captionTop + "px";
+        captions.appendChild(grp);
+
+        line.words.forEach(function (w, wi) {
+          const el = document.createElement("span");
+          el.className = "cap-word";
+          el.id = "cw-" + gi + "-" + wi;
+          el.textContent = S.uppercase ? w.text.toUpperCase() : w.text;
+          el.style.fontSize = line.size + "px";
+          el.style.color = S.captionColor;
+          grp.appendChild(el);
+
+          const nextWord = line.words[wi + 1];
+          tl.set(el, { color: S.accent }, w.start);
+          tl.set(el, { color: S.captionColor }, nextWord ? nextWord.start : gEnd);
+          tl.fromTo(el, { scale: 1 }, { scale: 1.12, duration: 0.08, ease: "power2.out" }, w.start);
+          tl.to(el, { scale: 1, duration: 0.14, ease: "power2.out" }, w.start + 0.08);
+        });
+
+        tl.set(grp, { visibility: "visible" }, line.start);
+        tl.fromTo(grp, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.16, ease: "back.out(2.2)" }, line.start);
+        tl.to(grp, { opacity: 0, duration: 0.08, ease: "power2.in" }, gEnd - 0.08);
+        tl.set(grp, { opacity: 0, visibility: "hidden" }, gEnd);
+      });
+
+      // Each impact (ball in the net): punch-in with a short camera shake, white flash.
+      const cam = document.getElementById("cam");
+      const flash = document.getElementById("flash");
+      cam.style.transformOrigin = "50% " + DATA.layout.focusY + "px";
+      DATA.impacts.forEach(function (I) {
+        if (DATA.effects.punch) {
+          tl.fromTo(cam, { scale: 1 }, { scale: 1.14, duration: 0.14, ease: "power3.out" }, I);
+          [[18, -10, 0.8], [-16, 8, -0.7], [10, -6, 0.4], [-6, 3, -0.2], [0, 0, 0]].forEach(function (s, k) {
+            tl.to(cam, { x: s[0], y: s[1], rotation: s[2], duration: 0.05, ease: "none" }, I + 0.02 + k * 0.05);
+          });
+          tl.to(cam, { scale: 1, duration: 1.0, ease: "power2.inOut" }, I + 1.0);
+        }
+        if (DATA.effects.flash) {
+          tl.fromTo(flash, { opacity: 0 }, { opacity: 0.7, duration: 0.04, ease: "none" }, I);
+          tl.to(flash, { opacity: 0, duration: 0.4, ease: "power2.out" }, I + 0.04);
+        }
+      });
+
+      tl.seek(0);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
